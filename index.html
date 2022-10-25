@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-        <meta
+        <!-- <meta
             http-equiv="Content-Security-Policy"
             content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
-        />
+        /> -->
         <link
             rel="stylesheet"
             href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
@@ -32,12 +32,7 @@
         <!-- import JavaScript -->
         <script src="https://unpkg.com/element-ui/lib/index.js"></script>
         <script>
-            new Vue({
-                el: '#app',
-                data: function () {
-                    return {visible: false};
-                }
-            });
+          
         </script>
         <script src="./renderer.js"></script>
     </body>

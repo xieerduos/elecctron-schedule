@@ -1,11 +1,10 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
-
-
+let mainWindow = null;
 function createWindow() {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -18,9 +17,7 @@ function createWindow() {
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
-
 }
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -33,7 +30,21 @@ app.whenReady().then(() => {
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+    ipcMain.handle('main-window', (event, data) => {
+        console.log('data :>> ', data);
+
+        setTimeout(() => {
+            showDialog();
+        }, 3000);
+    });
 });
+
+function showDialog() {
+    mainWindow.webContents.send('main-window', {
+        type: 'show-dialog',
+        data: true
+    });
+}
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

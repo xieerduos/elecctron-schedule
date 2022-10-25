@@ -5,3 +5,19 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
+
+new Vue({
+    el: '#app',
+    data: function () {
+        return {visible: false};
+    },
+    mounted() {
+        window.mainWindow.on('show-dialog', () => {
+            this.visible = true;
+            window.mainWindow.remove('show-dialog');
+        });
+        window.mainWindow.onLoaded('Vue on loaded!');
+    },
+    beforeDestroy() {},
+    methods: {}
+});
