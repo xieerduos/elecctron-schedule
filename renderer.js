@@ -14,9 +14,8 @@ new Vue({
     mounted() {
         window.mainWindow.on('show-dialog', () => {
             this.visible = true;
-            window.mainWindow.remove('show-dialog');
         });
-        window.mainWindow.onLoaded('Vue on loaded!');
+        // window.mainWindow.onLoaded('Vue on loaded!');
     },
     beforeDestroy() {},
     methods: {}

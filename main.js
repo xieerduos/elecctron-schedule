@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, powerMonitor, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
+const {useWorkingTime} = require('./WorkingTime');
 let mainWindow = null;
 function createWindow() {
     // Create the browser window.
@@ -37,6 +38,8 @@ app.whenReady().then(() => {
             showDialog();
         }, 3000);
     });
+
+    useWorkingTime(mainWindow);
 });
 
 function showDialog() {

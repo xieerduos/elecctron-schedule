@@ -1,5 +1,35 @@
 # electron-schedule
 
+[Windows 关机、锁屏、休眠和快捷命令](https://cloud.tencent.com/developer/article/1648498)
+
+### 锁屏
+
+新建锁屏.txt 文件，填写下面内容 -> 保存 ,重命名锁屏.vbs
+
+```vb
+Dim WSHShell
+
+Set WSHShell=WScript.CreateObject("WScript.Shell")
+
+WSHShell.Run "Rundll32.exe user32.dll,LockWorkStation", 0
+```
+
+### 休眠
+
+新建休眠.txt 文件，填写下面内容 -> 保存 ,重命名休眠.bat
+
+```s
+shutdown.exe -h
+```
+
+### 关机
+
+新建关机.txt 文件，填写下面内容 -> 保存 ,重命名关机.bat ,60 秒后关机
+
+```s
+shutdown -s -t 60
+```
+
 ## electron-quick-start
 
 **Clone and run for a quick way to see Electron in action.**
