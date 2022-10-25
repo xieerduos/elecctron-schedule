@@ -1,5 +1,5 @@
 {
-    "name": "electron-quick-start",
+    "name": "electron-schedule",
     "version": "1.0.0",
     "description": "A minimal Electron application",
     "main": "main.js",
@@ -12,7 +12,8 @@
         "quick",
         "start",
         "tutorial",
-        "demo"
+        "demo",
+        "electron-schedule"
     ],
     "author": "GitHub",
     "license": "CC0-1.0",
