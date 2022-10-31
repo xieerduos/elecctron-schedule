@@ -17,7 +17,7 @@ ipcRenderer.on('main-window', (event, data) => {
         const items = onArrEvents.filter((item) => item.type === data.type);
         items.forEach((item) => {
             if (item && item.callback && typeof item.callback === 'function') {
-                item.callback();
+                item.callback(data.data);
             } else {
                 console.error('[item error :>> ]', error);
             }

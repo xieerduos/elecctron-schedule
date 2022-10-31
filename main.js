@@ -1,7 +1,8 @@
 // Modules to control application life and create native browser window
 const {app, powerMonitor, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
-const {useWorkingTime} = require('./WorkingTime');
+// const {useWorkingTime} = require('./WorkingTime');
+const {useGoogleLog} = require('./google');
 let mainWindow = null;
 function createWindow() {
     // Create the browser window.
@@ -31,15 +32,17 @@ app.whenReady().then(() => {
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
-    ipcMain.handle('main-window', (event, data) => {
-        console.log('data :>> ', data);
+    // ipcMain.handle('main-window', (event, data) => {
+    //     console.log('data :>> ', data);
 
-        setTimeout(() => {
-            showDialog();
-        }, 3000);
-    });
+    //     setTimeout(() => {
+    //         showDialog();
+    //     }, 3000);
+    // });
 
-    useWorkingTime(mainWindow);
+    // useWorkingTime(mainWindow);
+
+    useGoogleLog(mainWindow);
 });
 
 function showDialog() {
