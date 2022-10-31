@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
-const {app, powerMonitor, BrowserWindow, ipcMain} = require('electron');
+const {app, powerMonitor, screen, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
-const {useWorkingTime} = require('./WorkingTime');
+// const {useWorkingTime} = require('./WorkingTime');
 let mainWindow = null;
 function createWindow() {
     // Create the browser window.
@@ -39,7 +39,38 @@ app.whenReady().then(() => {
         }, 3000);
     });
 
-    useWorkingTime(mainWindow);
+    function createTransparentWindow() {
+        console.log('screen.getAllDisplays', screen.getAllDisplays());
+        const maxHeight = Math.max(
+            ...screen.getAllDisplays().map((item) => item.size.height)
+        );
+        const hitDisplay = screen
+            .getAllDisplays()
+            .find((item) => item.size.height === maxHeight);
+        // 9 / 16 = w / h = w / maxHeight
+        // 9 / 16 =w /h
+        const maxWidth = maxHeight * (9 / 16);
+        console.log('maxWidth', maxWidth);
+        console.log('maxHeight', maxHeight);
+
+        // Create the browser window.
+        const mainWindow = new BrowserWindow({
+            x: hitDisplay.bounds.x,
+            y: hitDisplay.bounds.y,
+            width: maxWidth,
+            height: maxHeight,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+        });
+
+        // and load the index.html of the app.
+        mainWindow.loadFile('index.html');
+    }
+
+    createTransparentWindow();
+
+    // useWorkingTime(mainWindow);
 });
 
 function showDialog() {
