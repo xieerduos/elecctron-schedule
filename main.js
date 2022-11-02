@@ -1,84 +1,70 @@
 // Modules to control application life and create native browser window
-const {app, powerMonitor, screen, BrowserWindow, ipcMain} = require('electron');
+const {app, screen, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
-// const {useWorkingTime} = require('./WorkingTime');
-let mainWindow = null;
-function createWindow() {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
-        }
+let windwos = [];
+
+function createTransparentWindow() {
+    screen.getAllDisplays().forEach((display) => {
+        // console.log('display :>> ', display);
+        // Create the browser window.
+        const mainWindow = new BrowserWindow({
+            x: display.bounds.x,
+            y: display.bounds.y,
+            width: display.bounds.width,
+            height: display.bounds.height,
+            transparent: true,
+            frame: false,
+            fullscreen: false,
+            show: false,
+            skipTaskbar: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+        });
+
+        mainWindow.on('closed', () => {
+            app.quit();
+        });
+
+        // and load the index.html of the app.
+        mainWindow.loadFile('hacker.html');
+
+        windwos.push(mainWindow);
+        mainWindow.setAlwaysOnTop(true, 'screen-saver');
+        mainWindow.on('ready-to-show', () => {
+            mainWindow.show();
+
+            setTimeout(() => {
+                mainWindow.setFullScreen(true);
+
+                mainWindow.blur();
+                setTimeout(() => {
+                    mainWindow.focus();
+                }, 100);
+            }, 100);
+
+            // 下面三行代码别删
+            // 不然只能来评论区发送666解锁屏幕
+            setTimeout(() => {
+                mainWindow.close();
+            }, 10 * 1000);
+        });
     });
-
-    // and load the index.html of the app.
-    mainWindow.loadFile('index.html');
-
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-    createWindow();
+    createTransparentWindow();
 
     app.on('activate', function () {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
+        if (BrowserWindow.getAllWindows().length === 0)
+            createTransparentWindow();
     });
-    ipcMain.handle('main-window', (event, data) => {
-        console.log('data :>> ', data);
-
-        setTimeout(() => {
-            showDialog();
-        }, 3000);
-    });
-
-    function createTransparentWindow() {
-        console.log('screen.getAllDisplays', screen.getAllDisplays());
-        const maxHeight = Math.max(
-            ...screen.getAllDisplays().map((item) => item.size.height)
-        );
-        const hitDisplay = screen
-            .getAllDisplays()
-            .find((item) => item.size.height === maxHeight);
-        // 9 / 16 = w / h = w / maxHeight
-        // 9 / 16 =w /h
-        const maxWidth = maxHeight * (9 / 16);
-        console.log('maxWidth', maxWidth);
-        console.log('maxHeight', maxHeight);
-
-        // Create the browser window.
-        const mainWindow = new BrowserWindow({
-            x: hitDisplay.bounds.x,
-            y: hitDisplay.bounds.y,
-            width: maxWidth,
-            height: maxHeight,
-            webPreferences: {
-                preload: path.join(__dirname, 'preload.js')
-            }
-        });
-
-        // and load the index.html of the app.
-        mainWindow.loadFile('index.html');
-    }
-
-    createTransparentWindow();
-
-    // useWorkingTime(mainWindow);
 });
-
-function showDialog() {
-    mainWindow.webContents.send('main-window', {
-        type: 'show-dialog',
-        data: true
-    });
-}
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
