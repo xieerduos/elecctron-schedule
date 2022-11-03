@@ -45,9 +45,9 @@ function createTransparentWindow() {
 
             // 下面三行代码别删
             // 不然只能来评论区发送666解锁屏幕
-            setTimeout(() => {
-                mainWindow.close();
-            }, 10 * 1000);
+            // setTimeout(() => {
+            //     mainWindow.close();
+            // }, 10 * 1000);
         });
     });
 }
