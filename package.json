@@ -21,6 +21,6 @@
         "electron": "^21.1.1"
     },
     "dependencies": {
-        "dayjs": "^1.11.6"
+        "dayjs": "^1.11.7"
     }
 }
